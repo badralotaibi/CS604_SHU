@@ -2,8 +2,6 @@ import unittest
 
 
 class TestUM(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def test_problem_1(self):
         sum = 0
