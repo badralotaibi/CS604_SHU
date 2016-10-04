@@ -1,6 +1,5 @@
 import unittest
 
-
 class TestUM(unittest.TestCase):
 
     def test_problem_1(self):
