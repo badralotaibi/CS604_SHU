@@ -9,7 +9,6 @@ class TestUM(unittest.TestCase):
                 sum += num
 
         print("The sum is : ", sum)
-        print("Success")
 
 
 if __name__ == '__main__':
