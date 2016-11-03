@@ -31,9 +31,9 @@ The scope of the project will include:
 How to progress projrct estimation 
 ----------------------------------
 
-In our project where using Story Point for estimation and we really recomend installing *ZenHub* extension in order to preview the estimate and the velocity of the project proccess.  
+In our project we are using Story Point for estimation and we really recomend installing *ZenHub* extension in order to preview the estimate and the velocity of the project proccess.  
 
 
 
 
-How
+
