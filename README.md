@@ -6,14 +6,14 @@
 1-Saad Alboqami  
 2-Abdullah Alsuwahiri  
 3_Sultan Aloraini  
-5-Betsy  
-4-Badr Alotaibi
+4-Betsy James  
+5-Badr Alotaibi
  
 
 *Project Manager: Paul Sideleau*
 
 
-Project reviewed by Saverd Heart University 
+Project reviewed by Sacerd Heart University 
 
 This project devolped a financial application for SHU undergrad students and their parents, we will be building this using a micro-services architecture and the project will be done using agile development.
 
@@ -28,4 +28,12 @@ The scope of the project will include:
 •	Following OWASP best practices  
 •	Unit testing  
 
+How to progress projrct estimation 
+----------------------------------
 
+In our project where using Story Point for estimation and we really recomend installing *ZenHub* extension in order to preview the estimate and the velocity of the project proccess.  
+
+
+
+
+How
