@@ -28,10 +28,10 @@ The scope of the project will include:
 •	Following OWASP best practices  
 •	Unit testing  
 
-How to progress projrct estimation 
+How to progress the projrct estimation 
 ----------------------------------
 
-In our project we are using Story Point for estimation and we really recomend installing *ZenHub* extension in order to preview the estimate and the velocity of the project proccess.  
+In our project we are using Story Point for estimation and we recommend installing"*ZenHub*"extension in your browser so you can be abe to preview the estimate and velocity of the project proccess.  
 
 
 
