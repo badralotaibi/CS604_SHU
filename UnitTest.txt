@@ -1,0 +1,130 @@
+package userstory1;
+
+public class UserStory {
+    private String name;
+    private String username;
+    private String password;
+    private String email;
+    private String shu_id;
+    
+    public boolean StudentName(String name){
+       if(name.length()< 3 || name.matches(".*\\d+.*")){
+           System.out.print("The length is too short or the name can't be numbers.");
+          return false;
+       }
+       return true;
+   }
+
+    public boolean userName(String username){
+        if(username.length()< 3 || username.matches(".*\\d+.*") ){
+           System.out.print("The length is too short or The username can't all be numbers.");
+           return false;
+        }
+        return true;
+    
+    }
+    public boolean emailID(String email) {
+
+        if (email.contains("@") && (email.contains(".com") || email.contains(".edu"))){
+            return true;
+        }else
+            return false;
+    }
+    
+    public boolean s_Password(String password){
+      String pattern ="[A-Za-z0-9]";
+      String special = "[!@#$%&^*]";
+        if(password.length()< 8 || password.length()>12 || !password.matches(".*\\w+.*") ){
+            System.out.print("The password must be 8-12 characters long");        
+        return false;
+        }else{
+            return true;
+        }
+    }
+public boolean shu_ID(String shu_id){
+        if(shu_id.length()< 7 || !shu_id.matches(".*\\d+.*") ){
+           System.out.print("The length is too short or the ID isnt in the right format.");
+           return false;
+        }
+        return true;
+    
+    }
+
+}//end of class
+
+-------------------------------------------------------------------------------
+public class UserStoryTest {
+    
+    @Test
+    public void testFail_name(){
+        UserStory test1 = new UserStory();
+        boolean expected = false;
+        boolean actual = test1.StudentName("1111");
+        assertEquals(expected,actual);             
+    }    
+    @Test
+    public void testPass_name(){
+        UserStory test1 = new UserStory();
+        boolean expected = true;
+        boolean actual = test1.StudentName("Betsy");
+        assertEquals(expected,actual);
+     }      
+    @Test
+    public void testFail_username(){
+        UserStory test2 = new UserStory();
+        boolean expected = false;
+        boolean actual = test2.userName("1111");
+        assertEquals(expected,actual);            
+    }
+     @Test
+    public void testPass_username(){
+        UserStory test2 = new UserStory();
+        boolean expected = true;
+        boolean actual = test2.userName("jamesb");
+        assertEquals(expected,actual);
+     }
+    @Test
+    public void testFail_emailID(){
+        UserStory test3 = new UserStory();
+        boolean expected = false;
+        boolean actual = test3.emailID("betsy@james");
+        assertEquals(expected,actual);            
+    }
+     @Test
+    public void testPass_emailID(){
+       UserStory test3 = new UserStory();
+       boolean expected = true;
+       boolean actual = test3.emailID("betsyjames@gmail.com");
+       assertEquals(expected,actual);
+     }
+     @Test
+    public void testFail_password(){
+        UserStory test4 = new UserStory();
+        boolean expected = false;
+        boolean actual = test4.s_Password("james");
+        assertEquals(expected,actual);            
+    }
+     @Test
+    public void testPass_password(){
+       UserStory test4 = new UserStory();
+       boolean expected = true;
+       boolean actual = test4.s_Password("Qwert12#");
+       assertEquals(expected,actual);
+     }
+      @Test
+    public void testFail_shuID(){
+        UserStory test5 = new UserStory();
+        boolean expected = false;
+        boolean actual = test5.shu_ID("james");
+        assertEquals(expected,actual);            
+    }
+     @Test
+    public void testPass_shuID(){
+       UserStory test5 = new UserStory();
+       boolean expected = true;
+       boolean actual = test5.shu_ID("1234567");
+       assertEquals(expected,actual);
+     }
+       
+   
+}//end of class
