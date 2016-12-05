@@ -60,7 +60,7 @@ class ResetPassword(Resource):
         db.session.commit()
         return {'passwordReset': True}, 200
 -------
-\class ForgetPassword(Resource):
+class ForgetPassword(Resource):
     def post(self):
         parser = reqparse.RequestParser(trim=True)
         parser.add_argument('usernameOrEmail', type=str,
