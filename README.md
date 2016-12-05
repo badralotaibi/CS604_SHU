@@ -36,4 +36,12 @@ In our project we are using Story Point for estimation and we recommend installi
 
 
 
+1st iteration commits divided as follow:
+
+1-Saad Alboqami             10 commits
+2-Abdullah Alsuwahiri       10 commits
+3_Sultan Aloraini           10 commits
+4-Betsy James               10 commits
+5-Badr Alotaibi             10 commits
+
 
