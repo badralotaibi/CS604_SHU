@@ -1,0 +1,57 @@
+<script id="connectChildModalT" type="text/html">
+  <div id="connectChildModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- ko ifnot: emailSent -->
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <!-- ko if: emailSent -->
+          <button type="button" class="close"
+            data-bind="click: connectChildDone">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <h4 class="modal-title">Connect Child</h4>
+        </div>
+        <div class="modal-body">
+          <!-- ko if: emailSent -->
+          <div class="alert alert-success">
+            Connection email was sent. Please wait approval from a student.
+          </div>
+          <!-- /ko -->
+          <form>
+            <!-- ko if: ajaxError -->
+            <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+            <!-- /ko -->
+            <div class="form-group">
+              <input data-bind="value: name" type="text" class="form-control"
+              placeholder="Name" required="" autofocus="">
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">Date Of Birth</span>
+                <input id="dobinput" data-bind="value: dob" type="date"
+                class="form-control" required="">
+              </div>
+            </div>
+            <div class="form-group">
+              <input data-bind="value: shu_id" type="text" class="form-control"
+              placeholder="SHU ID" required="" autofocus="">
+            </div>
+            <!-- ko ifnot: emailSent -->
+            <button class="btn btn-primary btn-block" type="submit"
+            data-bind="click: connectChild">Connect</button>
+            <!-- /ko -->
+            <!-- ko if: emailSent -->
+            <button class="btn btn-default btn-block" type="submit"
+            data-bind="click: connectChildDone">Ok</button>
+            <!-- /ko -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

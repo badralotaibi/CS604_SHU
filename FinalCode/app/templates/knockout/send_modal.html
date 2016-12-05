@@ -1,0 +1,50 @@
+<script id="sendModalT" type="text/html">
+  <div id="sendModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- ko ifnot: sendOk -->
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <!-- ko if: sendOk -->
+          <button type="button" class="close"
+            data-bind="click: sendDone">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <h4 class="modal-title">Send Money</h4>
+        </div>
+        <div class="modal-body">
+          <!-- ko if: sendOk -->
+          <div class="alert alert-success">
+            Sending money successfully
+          </div>
+          <!-- /ko -->
+          <form>
+            <!-- ko if: ajaxError -->
+            <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+            <!-- /ko -->
+            <!-- ko ifnot: sendOk -->
+            <div class="form-group">
+              Send to <span data-bind="text: name"></span>
+              (<span data-bind="text: email"></span>)
+            </div>
+            <div class="form-group">
+              <input data-bind="value: amount" type="text" class="form-control"
+              placeholder="amount" required="" autofocus="">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit"
+            data-bind="click: send">Send</button>
+            <!-- /ko -->
+            <!-- ko if: sendOk -->
+            <button class="btn btn-default btn-block" type="submit"
+            data-bind="click: sendDone">Ok</button>
+            <!-- /ko -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

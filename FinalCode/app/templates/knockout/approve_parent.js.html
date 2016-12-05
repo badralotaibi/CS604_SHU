@@ -1,0 +1,79 @@
+<script type="text/javascript">
+"use strict";
+
+function approveParentModel(base) {
+  var self = this;
+  self.base = base;
+  self.token = ko.observable();
+  self.ajaxError = ko.observable();
+  self.isParent = ko.observable();
+  self.approved = ko.observable();
+  self.approvalIsSent = ko.observable();
+
+  self.init = function() {
+    self.ajaxError('');
+    self.isParent(null);
+    self.approvalIsSent(false);
+    $.ajax ({
+      type: 'GET', url: AUTH_SERVICE_URL + 'approve-parent-' + self.token(),
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      success: function (data) {
+        self.isParent(data);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.leave = function() {
+    self.token('');
+    self.ajaxError('');
+    self.isParent(null);
+    self.approvalIsSent(false);
+    self.approved(false);
+  };
+
+  self.approveConnection = function() {
+    self.sendApproval(true);
+  };
+
+  self.declineConnection = function() {
+    self.sendApproval(false);
+  };
+
+  self.goAccount = function() {
+    location = self.base.accountV().href;
+  };
+
+  self.sendApproval = function(approved) {
+    $.ajax ({
+      type: 'POST', url: AUTH_SERVICE_URL + 'approve-parent-' + self.token(),
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: JSON.stringify({approved: approved}),
+      success: function (data) {
+        self.approved(data.approved);
+        self.approvalIsSent(true);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+}
+</script>

@@ -1,0 +1,61 @@
+<script type="text/javascript">
+"use strict";
+
+function childTransactionsModalModel(base) {
+  var self = this;
+  self.base = base;
+  self.name = ko.observable();
+  self.email = ko.observable();
+  self.dateStart = ko.observable();
+  self.transactions = ko.observable();
+  self.balanceStart = ko.observable();
+  self.ajaxError = ko.observable();
+
+  self.init = function() {
+    self.name('');
+    self.email('');
+    self.dateStart(moment().format('YYYY-MM-DD'));
+    self.transactions([]);
+    self.balanceStart('');
+    self.ajaxError('');
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.dateStart.subscribe(function(newVal) {
+    if (newVal !== null) {
+      self.getTransactions();
+    }
+  });
+
+  self.getTransactions = function() {
+    self.ajaxError('');
+    var data = {
+      child_email: self.email(),
+      date_start: self.dateStart(),
+    };
+    $.ajax ({
+      type: 'GET', url: ACCOUNTS_SERVICE_URL + 'transactions-for',
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      data: data,
+      success: function (data) {
+        self.transactions(data.transactions);
+        self.balanceStart(data.balanceStart);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+}
+</script>

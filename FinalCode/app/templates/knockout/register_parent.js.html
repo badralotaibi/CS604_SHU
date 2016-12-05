@@ -1,0 +1,61 @@
+<script type="text/javascript">
+"use strict";
+
+function registerParentModel(base) {
+  var self = this;
+  self.base = base;
+  self.name = ko.observable();
+  self.username = ko.observable();
+  self.email = ko.observable();
+  self.password = ko.observable();
+  self.confirmPassword = ko.observable();
+  self.ajaxError = ko.observable();
+  self.registered = ko.observable();
+
+  self.hasError = ko.computed(function() {
+    return self.password() !== self.confirmPassword();
+  });
+
+  self.init = function() {
+    self.name('');
+    self.username('');
+    self.email('');
+    self.password('');
+    self.confirmPassword('');
+    self.ajaxError('');
+    self.registered(false);
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.register = function() {
+    self.ajaxError('');
+    var data = {
+      name: self.name(),
+      username: self.username(),
+      email: self.email(),
+      password: self.password(),
+    };
+    $.ajax ({
+      type: 'POST', url: AUTH_SERVICE_URL + 'register-parent',
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: JSON.stringify(data),
+      success: function (data) {
+        self.registered(true);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.goLogin = function() {
+    location = self.base.loginV().href;
+  };
+}
+</script>

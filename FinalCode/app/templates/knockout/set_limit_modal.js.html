@@ -1,0 +1,78 @@
+<script type="text/javascript">
+"use strict";
+
+function setLimitModalModel(base) {
+  var self = this;
+  self.base = base;
+  self.name = ko.observable();
+  self.email = ko.observable();
+  self.dailyLimit = ko.observable();
+  self.ajaxError = ko.observable();
+  self.setDone = ko.observable();
+
+  self.init = function() {
+    self.name('');
+    self.email('');
+    self.dailyLimit('');
+    self.ajaxError('');
+    self.setDone(false);
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.getLimit = function() {
+    self.setDone(false);
+    self.ajaxError('');
+    var data = {
+      child_email: self.email(),
+    };
+    $.ajax ({
+      type: 'GET', url: ACCOUNTS_SERVICE_URL + 'daily-limit-for',
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      data: data,
+      success: function (data) {
+        self.dailyLimit(data.daily_limit);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.setLimit = function() {
+    self.ajaxError('');
+    var data = {
+      child_email: self.email(),
+      daily_limit: self.dailyLimit()
+    };
+    $.ajax ({
+      type: 'PUT', url: ACCOUNTS_SERVICE_URL + 'daily-limit-for',
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: JSON.stringify(data),
+      success: function (data) {
+        self.setDone(true);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+}
+</script>

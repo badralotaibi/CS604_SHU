@@ -1,0 +1,231 @@
+<script id="accountT" type="text/html">
+  <div class="row" data-bind="template: { name: 'connectChildModalT', data: connectChildModal }"></div>
+  <div class="row" data-bind="template: { name: 'depositModalT', data: depositModal }"></div>
+  <div class="row" data-bind="template: { name: 'sendModalT', data: sendModal }"></div>
+  <div class="row" data-bind="template: { name: 'spendModalT', data: spendModal }"></div>
+  <div class="row" data-bind="template: { name: 'childTransactionsModalT', data: childTransactionsModal }"></div>
+  <div class="row" data-bind="template: { name: 'setLimitModalT', data: setLimitModal }"></div>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-8">
+      <!-- ko if: accountAjaxError -->
+      <div class="alert alert-danger" data-bind="text: accountAjaxError"></div>
+      <!-- /ko -->
+      <div class="panel panel-default panel-info">
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="fa fa-usd"></i> Account</h1>
+        </div>
+        <div class="panel-body" data-bind="with: account">
+          <div class="pull-right">
+            <button class="btn btn-success"
+              data-bind="click: $parent.showDepositModal" type="button">
+              Deposit
+            </button>
+            <!-- ko if: $parent.profile().isStudent -->
+            <button class="btn btn-primary"
+              data-bind="click: $parent.showSpendModal" type="button">
+              Spend
+            </button>
+            <!-- /ko -->
+          </div>
+          <p>Balance: <span data-bind="text: balance"></span></p>
+          <!-- ko if: daily_limit > 0 -->
+          <p>Daily limit: <span data-bind="text: daily_limit"></span></p>
+          <!-- /ko -->
+        </div>
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="fa fa-table"></i> Transactions</h1>
+        </div>
+        <div class="panel-body">
+          <!-- ko if: transactionsAjaxError -->
+          <div class="alert alert-danger" data-bind="text: transactionsAjaxError"></div>
+          <!-- /ko -->
+          <strong>Starting Balance: </strong>
+          <span class="form-control-static" data-bind="text: balanceStart"></span>
+          <div class="pull-right" >
+            <strong>On Date: </strong>
+            <input type="date" data-bind="value: dateStart" required="">
+          </div>
+        </div>
+        <!-- ko if: transactions().length -->
+        <table class="table table-striped">
+          <tr>
+            <th>Created</th>
+            <th>Account</th>
+            <th>Memo</th>
+            <th>Expenses</th>
+            <th>Income</th>
+            <th>Balance</th>
+          </tr>
+          <!-- ko foreach: transactions -->
+          <tr>
+            <td data-bind="text: moment(created).format('YY/MM/DD HH:mm:ss')"></td>
+            <td data-bind="text: account"></td>
+            <td data-bind="text: memo"></td>
+            <td class="text-right" data-bind="text: debit"></td>
+            <td class="text-right" data-bind="text: credit"></td>
+            <td class="text-right" data-bind="text: balance"></td>
+          </tr>
+          <!-- /ko  -->
+        </table>
+        <!-- /ko  -->
+        <!-- ko ifnot: transactions().length -->
+        <div class="panel-body bg-info text-center">No transactions on this date</div>
+        <!-- /ko  -->
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+      <!-- ko if: profileAjaxError -->
+      <div class="alert alert-danger" data-bind="text: profileAjaxError"></div>
+      <!-- /ko -->
+      <div class="panel panel-default panel-info" data-bind="with: profile">
+
+        <div class="panel-heading">
+          <!-- ko if: isStudent -->
+          <h1 class="panel-title"><i class="fa fa-mortar-board"></i> Student Profile</h1>
+          <!-- /ko -->
+          <!-- ko if: isParent -->
+          <h1 class="panel-title"><i class="glyphicon glyphicon-user"></i> Parent Profile</h1>
+          <!-- /ko -->
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item clearfix">
+            <span data-bind="text: name"></span>
+            <!-- ko if: isStudent -->
+            <a title="More info" data-selector="true" class="btn btn-info pull-right"
+              tabindex="0" role="button" data-html="true"
+              data-container="body" data-toggle="popover"
+              data-placement="left" data-trigger="focus"
+              data-bind="attr: { 'data-title': name,
+                                 'data-content': '<table><tr><td>Date Of Birth:&nbsp;</td><td>' +
+                                 moment(isStudent.dob).format('YYYY/MM/DD') + '</td></tr>' +
+                                 '<tr><td>Email:&nbsp;</td><td>' + email + '</td></tr>' +
+                                 '<tr><td>SHU ID:&nbsp;</td><td>' + isStudent.shuId + '</tr></table>' }">
+              <i class="fa fa-info-circle"></i>
+            </a>
+            <!-- /ko -->
+            <!-- ko if: isParent -->
+            <a title="More info" data-selector="true" class="btn btn-info pull-right"
+              tabindex="0" role="button" data-html="true"
+              data-container="body" data-toggle="popover"
+              data-placement="left" data-trigger="focus"
+              data-bind="attr: { 'data-title': name,
+                                 'data-content': '<table><tr><td>Email:&nbsp;</td><td>' +
+                                 email + '</td></tr></table>' }">
+              <i class="fa fa-info-circle"></i>
+              </a>
+            <!-- /ko -->
+          </li>
+          <!-- ko if: isParent -->
+          <!-- ko ifnot: isParent.children.length + isParent.connecting.length -->
+          <li class="list-group-item">
+            <button class="btn btn-default btn-block"
+            data-bind="click: $parent.showConnectChildModal" type="button">
+              Connect child
+            </button>
+          </li>
+          <!-- /ko -->
+          <!-- /ko -->
+        </ul>
+
+        <!-- ko if: isParent -->
+
+          <!-- ko if: isParent.children.length -->
+          <div class="panel-heading">
+            <h1 class="panel-title"><i class="fa fa-address-card"></i> Children</h1>
+          </div>
+          <ul class="list-group">
+            <!-- ko foreach: isParent.children -->
+            <li class="list-group-item clearfix">
+              <span data-bind="text: name"></span>
+              <div class="pull-right">
+                <button title="Send Money" class="btn btn-success" data-bind="click: $parents[1].showSendModal">
+                  <i class="fa fa-money"></i>
+                </button>
+                <button title="View Transactions" class="btn btn-primary" data-bind="click: $parents[1].showChildTransactionsModal">
+                  <i class="fa fa-table"></i>
+                </button>
+                <button title="Set Daily Limit" class="btn btn-primary" data-bind="click: $parents[1].showSetLimitModal">
+                  <i class="fa fa-unsorted"></i>
+                </button>
+                <a title="More info" data-selector="true" class="btn btn-info"
+                  tabindex="0" role="button" data-html="true"
+                  data-container="body" data-toggle="popover"
+                  data-placement="left" data-trigger="focus"
+                  data-bind="attr: { 'data-title': name,
+                                     'data-content': '<table><tr><td>Date Of Birth:&nbsp;</td><td>' +
+                                     moment(dob).format('YYYY/MM/DD') + '</td></tr>' +
+                                     '<tr><td>Email:&nbsp;</td><td>' + email + '</td></tr>' +
+                                     '<tr><td>SHU ID:&nbsp;</td><td>' + shuId + '</tr></table>' }">
+                  <i class="fa fa-info-circle"></i>
+                </a>
+              </div>
+            </li>
+            <!-- /ko -->
+            <!-- ko ifnot: isParent.connecting.length -->
+            <li class="list-group-item">
+              <button class="btn btn-default btn-block"
+              data-bind="click: $parent.showConnectChildModal" type="button">
+                Connect child
+              </button>
+            </li>
+            <!-- /ko -->
+          </ul>
+          <!-- /ko -->
+
+          <!-- ko if: isParent.connecting.length -->
+          <div class="panel-heading">
+            <h1 class="panel-title"><i class="fa fa-user-plus"></i> Requested Connections</h1>
+          </div>
+          <ul class="list-group">
+            <!-- ko foreach: isParent.connecting -->
+            <li class="list-group-item clearfix">
+              <span data-bind="text: name"></span>
+              <a title="More info" data-selector="true" class="btn btn-info pull-right"
+                tabindex="0" role="button" data-html="true"
+                data-container="body" data-toggle="popover"
+                data-placement="left" data-trigger="focus"
+                data-bind="attr: { 'data-title': name,
+                                   'data-content': '<table><tr><td>Date Of Birth:&nbsp;</td><td>' +
+                                   moment(dob).format('YYYY/MM/DD') + '</td></tr>' +
+                                   '<tr><td>SHU ID:&nbsp;</td><td>' + shuId + '</tr></table>' }">
+                <i class="fa fa-info-circle"></i>
+              </a>
+            </li>
+            <!-- /ko -->
+            <li class="list-group-item">
+              <button class="btn btn-default btn-block"
+              data-bind="click: $parent.showConnectChildModal" type="button">
+                Connect child
+              </button>
+            </li>
+          </ul>
+          <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: isStudent && isStudent.parents.length -->
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="fa fa-address-card"></i> Parents</h1>
+        </div>
+        <ul class="list-group">
+            <!-- ko foreach: isStudent.parents -->
+            <li class="list-group-item clearfix">
+              <span data-bind="text: name"></span>
+              <a title="More info" data-selector="true" class="btn btn-info pull-right"
+                tabindex="0" role="button" data-html="true"
+                data-container="body" data-toggle="popover"
+                data-placement="left" data-trigger="focus"
+                data-bind="attr: { 'data-title': name,
+                                   'data-content': '<table><tr><td>Email:&nbsp;</td><td>' +
+                                   email + '</td></tr></table>' }">
+                <i class="fa fa-info-circle"></i>
+              </a>
+            </li>
+            <!-- /ko -->
+        </ul>
+        <!-- /ko -->
+
+      </div>
+    </div>
+  </div>
+</script>

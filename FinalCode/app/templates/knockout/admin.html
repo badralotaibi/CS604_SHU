@@ -1,0 +1,51 @@
+<script id="adminT" type="text/html">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default panel-info">
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="fa fa-gear"></i> Admin</h1>
+        </div>
+        <div class="panel-body">
+          <!-- ko if: ajaxError -->
+          <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+          <!-- /ko -->
+          <div class="pull-right" >
+            <strong>On Date: </strong>
+            <input type="date" data-bind="value: dateStart" required="">
+          </div>
+        </div>
+        <!-- ko if: loginAttempts().length -->
+        <table class="table table-striped">
+          <tr>
+            <th>At</th>
+            <th>Success</th>
+            <th>Info</th>
+          </tr>
+          <!-- ko foreach: loginAttempts-->
+          <tr>
+            <td data-bind="text: moment.utc(at).local().format('YY/MM/DD HH:mm:ss')"></td>
+            <td>
+              <!-- ko if: success -->
+                <i class="text-success fa fa-check"></i>
+              <!-- /ko  -->
+              <!-- ko ifnot: success -->
+                <i class="text-danger fa fa-ban"></i>
+              <!-- /ko  -->
+            </td>
+            <!-- ko if: success -->
+            <td data-bind="text: username + ' from: ' + fromWhere"></td>
+            <!-- /ko  -->
+            <!-- ko ifnot: success -->
+            <td data-bind="text: username + ': ' + info + ', from: ' + fromWhere"></td>
+            <!-- /ko  -->
+          </tr>
+          <!-- /ko  -->
+        </table>
+        <!-- /ko  -->
+        <!-- ko ifnot: loginAttempts().length -->
+        <div class="panel-body bg-info text-center">No login attempts on this date</div>
+        <!-- /ko  -->
+      </div>
+    </div>
+  </div>
+</script>

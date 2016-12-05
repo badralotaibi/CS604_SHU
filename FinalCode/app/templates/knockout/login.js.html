@@ -1,0 +1,56 @@
+<script type="text/javascript">
+"use strict";
+
+function loginModel(base) {
+  var self = this;
+  self.base = base;
+  self.username = ko.observable();
+  self.password = ko.observable();
+  self.ajaxError = ko.observable();
+  self.nextUrl = ko.observable();
+
+  self.init = function() {
+    self.username('');
+    self.password('');
+    self.ajaxError('');
+    self.nextUrl(null);
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.login = function() {
+    self.ajaxError('');
+    $.ajax ({
+      type: "POST", url: AUTH_SERVICE_URL,
+      username: self.username(),
+      passowrd: self.password(),
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.username() + ":" + self.password())
+      },
+      success: function (data) {
+        var now = new Date();
+        data.expires_at = new Date(now.getTime() + data.expires*1000);
+        self.base.auth(data);
+        sessionStorage.setItem('auth', JSON.stringify(data));
+
+        if (data.isAdmin) {
+          location = self.base.adminV().href;
+        }
+        else if (self.nextUrl()) {
+          location = self.nextUrl();
+        } else {
+          location = self.base.accountV().href;
+        }
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+}
+</script>

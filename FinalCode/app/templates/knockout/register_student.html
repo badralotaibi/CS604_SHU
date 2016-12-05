@@ -1,0 +1,61 @@
+<script id="registerStudentT" type="text/html">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2
+    col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+      <div class="panel panel-default panel-info">
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="glyphicon glyphicon-pencil"></i> Register Student</h1>
+        </div>
+        <div class="panel-body">
+          <!-- ko ifnot: registered -->
+          <form data-bind="submit: register">
+            <!-- ko if: ajaxError -->
+            <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+            <!-- /ko -->
+            <div class="form-group">
+              <input data-bind="value: name" type="text" class="form-control"
+              placeholder="Name" required="" autofocus="">
+            </div>
+            <div class="form-group">
+              <input data-bind="value: email" type="email" class="form-control"
+              placeholder="Email" required="">
+            </div>
+            <div class="form-group">
+              <input data-bind="value: username" type="text" class="form-control"
+              placeholder="Username" required="">
+            </div>
+            <div class="form-group">
+              <input data-bind="value: password" type="password" class="form-control"
+              placeholder="Password" required="">
+            </div>
+            <div class="form-group">
+              <input data-bind="value: confirmPassword, valueUpdate: 'keyup'"
+              type="password" class="form-control" placeholder="Confirm password" required="">
+            </div>
+            <!-- ko if: hasError -->
+            <div class="alert alert-danger">Passwords differ</div>
+            <!-- /ko -->
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">Date Of Birth</span>
+                <input id="dobinput" data-bind="value: dob" type="date"
+                class="form-control" required="">
+              </div>
+            </div>
+            <div class="form-group">
+              <input data-bind="value: shu_id" type="text" class="form-control"
+              placeholder="SHU ID" required="" autofocus="">
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+          </form>
+          <!-- /ko -->
+          <!-- ko if: registered -->
+          <div class="alert alert-success">Successfully Registered</div>
+          <button class="btn btn-lg btn-primary btn-block"
+          type="button" data-bind="click: goLogin">Login</button>
+          <!-- /ko -->
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

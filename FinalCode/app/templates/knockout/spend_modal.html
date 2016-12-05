@@ -1,0 +1,50 @@
+<script id="spendModalT" type="text/html">
+  <div id="spendModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- ko ifnot: spendOk -->
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <!-- ko if: spendOk -->
+          <button type="button" class="close"
+            data-bind="click: spendDone">
+            <span>&times;</span>
+          </button>
+          <!-- /ko -->
+          <h4 class="modal-title">Spend Money</h4>
+        </div>
+        <div class="modal-body">
+          <!-- ko if: spendOk -->
+          <div class="alert alert-success">
+            Done successfully
+          </div>
+          <!-- /ko -->
+          <form>
+            <!-- ko if: ajaxError -->
+            <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+            <!-- /ko -->
+            <!-- ko ifnot: spendOk -->
+            <div class="form-group">
+              <input data-bind="value: memo" type="text" class="form-control"
+              placeholder="Spend to..." required="" autofocus="">
+            </div>
+            <div class="form-group">
+              <input data-bind="value: amount" type="text" class="form-control"
+              placeholder="Amount" required="" autofocus="">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit"
+            data-bind="click: spend">Spend</button>
+            <!-- /ko -->
+            <!-- ko if: spendOk -->
+            <button class="btn btn-default btn-block" type="submit"
+            data-bind="click: spendDone">Ok</button>
+            <!-- /ko -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

@@ -1,0 +1,50 @@
+<script id="approveParentT" type="text/html">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2
+    col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+      <div class="panel panel-default panel-info">
+        <div class="panel-heading">
+          <h1 class="panel-title"><i class="fa fa-check-square-o"></i> Approve Parent</h1>
+        </div>
+        <div class="panel-body">
+          <form>
+            <!-- ko if: ajaxError -->
+            <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+            <!-- /ko -->
+            <!-- ko ifnot: approvalIsSent-->
+              <!-- ko ifnot: ajaxError -->
+              <!-- ko if: isParent -->
+              <div class="form-group" data-bind="with: isParent">
+                <p class="form-control-static">You got connection request from
+                  <strong data-bind="text: name"></strong>&nbsp;(<strong data-bind="text: email"></strong>).
+                </p>
+              </div>
+              <!-- /ko -->
+              <button class="btn btn-lg btn-success btn-block"
+              type="button" data-bind="click: approveConnection">Approve</button>
+              <button class="btn btn-lg btn-danger btn-block"
+              type="button" data-bind="click: declineConnection">Decline</button>
+              <!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: approvalIsSent-->
+              <!-- ko ifnot: approved -->
+                <div class="alert alert-warning" data-bind="with: isParent">
+                  <p class="form-control-static">You got declined connection request from
+                  <strong data-bind="text: name"></strong>&nbsp;(<strong data-bind="text: email"></strong>).
+                </div>
+              <!-- /ko -->
+              <!-- ko if: approved -->
+                <div class="alert alert-success" data-bind="with: isParent">
+                  <p class="form-control-static">You got approved connection request from
+                  <strong data-bind="text: name"></strong>&nbsp;(<strong data-bind="text: email"></strong>).
+                </div>
+              <!-- /ko -->
+              <button class="btn btn-lg btn-primary btn-block"
+              type="button" data-bind="click: goAccount">Ok</button>
+            <!-- /ko -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

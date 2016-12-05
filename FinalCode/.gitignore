@@ -1,0 +1,7 @@
+*.pyc
+.idea/
+.env/
+*.swp
+app.db
+tmp/
+.zedstate

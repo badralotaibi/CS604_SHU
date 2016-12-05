@@ -1,0 +1,67 @@
+<script type="text/javascript">
+"use strict";
+
+function depositModalModel(base) {
+  var self = this;
+  self.base = base;
+  self.cardNumber = ko.observable();
+  self.expYear = ko.observable();
+  self.expMonth = ko.observable();
+  self.cvc = ko.observable();
+  self.amount = ko.observable();
+  self.ajaxError = ko.observable();
+  self.depositOk = ko.observable();
+
+  self.init = function() {
+    self.cardNumber('');
+    self.expMonth('');
+    self.expYear('');
+    self.cvc('');
+    self.amount('');
+    self.ajaxError('');
+    self.depositOk(false);
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.deposit = function() {
+    self.ajaxError('');
+    var data = {
+      card_number: self.cardNumber(),
+      exp_month: self.expMonth(),
+      exp_year: self.expYear(),
+      cvc: self.cvc(),
+      amount: self.amount()
+    };
+    $.ajax ({
+      type: 'POST', url: ACCOUNTS_SERVICE_URL + 'deposit',
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: JSON.stringify(data),
+      success: function (data) {
+        self.depositOk(true);
+        self.base.selectedView().data.getTransactions();
+        self.base.selectedView().data.getAccount();
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.depositDone = function() {
+    self.init();
+    $('#depositModal').modal('hide');
+  };
+}
+</script>

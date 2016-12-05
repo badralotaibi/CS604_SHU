@@ -1,0 +1,13 @@
+<script type="text/javascript">
+"use strict";
+
+function logoutModel(base) {
+  var self = this;
+  self.base = base;
+  self.logout = function () {
+    self.base.auth(null);
+    sessionStorage.removeItem('auth');
+    location = self.base.loginV().href;
+  };
+}
+</script>

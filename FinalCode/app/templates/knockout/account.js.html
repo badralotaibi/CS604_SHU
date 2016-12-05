@@ -1,0 +1,174 @@
+<script type="text/javascript">
+"use strict";
+
+function accountModel(base) {
+  var self = this;
+  self.base = base;
+  self.profileAjaxError = ko.observable();
+  self.accountAjaxError = ko.observable();
+  self.transactionsAjaxError = ko.observable();
+  self.profile = ko.observable();
+  self.account = ko.observable();
+  self.transactions = ko.observableArray();
+  self.dateStart = ko.observable();
+  self.balanceStart = ko.observable();
+  self.connectChildModal = new connectChildModalModel(base);
+  self.depositModal = new depositModalModel(base);
+  self.sendModal = new sendModalModel(base);
+  self.spendModal = new spendModalModel(base);
+  self.childTransactionsModal = new childTransactionsModalModel(base);
+  self.setLimitModal = new setLimitModalModel(base);
+
+  self.init = function() {
+    self.getProfile();
+    self.getAccount();
+    self.dateStart(moment().format('YYYY-MM-DD'));
+  };
+
+  self.dateStart.subscribe(function(newVal) {
+    if (newVal !== null) {
+      self.getTransactions();
+    }
+  });
+
+  self.getProfile = function() {
+    self.profileAjaxError('');
+    $.ajax ({
+      type: "GET", url: AUTH_SERVICE_URL + 'profile',
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      success: function (data) {
+        self.profile(data);
+        $('[data-toggle="popover"]').popover();
+      },
+      error: function (e) {
+        processError(e, self.profileAjaxError);
+      }
+    });
+  };
+
+  self.getAccount = function() {
+    self.accountAjaxError('');
+    $.ajax ({
+      type: "GET", url: ACCOUNTS_SERVICE_URL,
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      success: function (data) {
+        self.account(data);
+      },
+      error: function (e) {
+        if (e.status === 404) {  // Create account if not found
+          $.ajax ({
+            type: "POST", url: ACCOUNTS_SERVICE_URL,
+            username: self.base.auth().token,
+            password: 'x',
+            headers: {
+              "Authorization": "Basic " +
+                btoa(self.base.auth().token + ":x")
+            },
+            success: function (data) {
+              self.account(data);
+            },
+            error: function (e) {
+              processError(e, self.accountAjaxError);
+            }
+          });
+        } else {
+          processError(e, self.accountAjaxError);
+        }
+      }
+    });
+  };
+
+  self.getTransactions = function() {
+    self.transactionsAjaxError('');
+    $.ajax({
+      type: "GET", url: ACCOUNTS_SERVICE_URL + 'transactions',
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      data: {date_start: self.dateStart()},
+      success: function (data) {
+        self.transactions(data.transactions);
+        self.balanceStart(data.balanceStart);
+      },
+      error: function (e) {
+        processError(e, self.transactionsAjaxError);
+      }
+    });
+  };
+
+  self.leave = function() {
+    self.profile('');
+    self.account('');
+    self.transactions([]);
+    self.dateStart(null);
+    self.balanceStart('');
+    self.profileAjaxError('');
+    self.accountAjaxError('');
+    self.transactionsAjaxError('');
+
+    self.connectChildModal.leave();
+    self.depositModal.leave();
+    self.sendModal.leave();
+    self.spendModal.leave();
+    self.childTransactionsModal.leave();
+    self.setLimitModal.leave();
+  };
+
+  self.hideModals = function() {
+    $('#connectChildModal').modal('hide');
+    $('#depositModal').modal('hide');
+    $('#sendModal').modal('hide');
+    $('#spendModal').modal('hide');
+    $('#childTransactionsModal').modal('hide');
+    $('#setLimitModal').modal('hide');
+  };
+
+  self.showConnectChildModal = function () {
+    $('#connectChildModal').modal();
+  };
+
+  self.showDepositModal = function () {
+    $('#depositModal').modal();
+  };
+
+  self.showSendModal = function (data) {
+    self.sendModal.name(data.name);
+    self.sendModal.email(data.email);
+    $('#sendModal').modal();
+  };
+
+  self.showSpendModal = function (data) {
+    $('#spendModal').modal();
+  };
+
+  self.showChildTransactionsModal = function (data) {
+    self.childTransactionsModal.name(data.name);
+    self.childTransactionsModal.email(data.email);
+    self.childTransactionsModal.getTransactions();
+    $('#childTransactionsModal').modal();
+  };
+
+  self.showSetLimitModal = function (data) {
+    self.setLimitModal.name(data.name);
+    self.setLimitModal.email(data.email);
+    self.setLimitModal.getLimit()
+    $('#setLimitModal').modal();
+  };
+}
+</script>

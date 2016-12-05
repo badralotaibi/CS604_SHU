@@ -1,0 +1,48 @@
+<script type="text/javascript">
+"use strict";
+
+function adminModel(base) {
+  var self = this;
+  self.base = base;
+  self.ajaxError = ko.observable();
+  self.loginAttempts = ko.observableArray();
+  self.dateStart = ko.observable();
+
+  self.init = function() {
+    self.dateStart(moment().format('YYYY-MM-DD'));
+  };
+
+  self.dateStart.subscribe(function(newVal) {
+    if (newVal !== null) {
+      self.getLoginAttempts();
+    }
+  });
+
+  self.getLoginAttempts = function() {
+    self.ajaxError('');
+    $.ajax({
+      type: "GET", url: AUTH_SERVICE_URL + 'login-attempts',
+      cache: false,
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      data: {date_start: self.dateStart()},
+      success: function (data) {
+        self.loginAttempts(data);
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.leave = function() {
+    self.loginAttempts([]);
+    self.dateStart(null);
+    self.ajaxError('');
+  };
+}
+</script>

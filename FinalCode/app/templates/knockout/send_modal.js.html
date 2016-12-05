@@ -1,0 +1,60 @@
+<script type="text/javascript">
+"use strict";
+
+function sendModalModel(base) {
+  var self = this;
+  self.base = base;
+  self.name = ko.observable();
+  self.email = ko.observable();
+  self.amount = ko.observable();
+  self.ajaxError = ko.observable();
+  self.sendOk = ko.observable();
+
+  self.init = function() {
+    self.name('');
+    self.email('');
+    self.amount('');
+    self.ajaxError('');
+    self.sendOk(false);
+  };
+
+  self.leave = function() {
+    self.init();
+  };
+
+  self.init();
+
+  self.send = function() {
+    self.ajaxError('');
+    var data = {
+      child_email: self.email(),
+      amount: self.amount()
+    };
+    $.ajax ({
+      type: 'POST', url: ACCOUNTS_SERVICE_URL + 'send-money-to',
+      username: self.base.auth().token,
+      password: 'x',
+      headers: {
+        "Authorization": "Basic " +
+          btoa(self.base.auth().token + ":x")
+      },
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: JSON.stringify(data),
+      success: function (data) {
+        self.sendOk(true);
+        self.base.selectedView().data.getTransactions();
+        self.base.selectedView().data.getAccount();
+      },
+      error: function (e) {
+        processError(e, self.ajaxError);
+      }
+    });
+  };
+
+  self.sendDone = function() {
+    self.init();
+    $('#sendModal').modal('hide');
+  };
+}
+</script>

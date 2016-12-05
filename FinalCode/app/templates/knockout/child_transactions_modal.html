@@ -1,0 +1,55 @@
+<script id="childTransactionsModalT" type="text/html">
+  <div id="childTransactionsModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <h4 class="modal-title"><span data-bind="text: name"></span>
+          (<span data-bind="text: email"></span>) Transactions</h4>
+        </div>
+        <div class="modal-body">
+          <!-- ko if: ajaxError -->
+          <div class="alert alert-danger" data-bind="text: ajaxError"></div>
+          <!-- /ko -->
+          <strong>Starting Balance: </strong>
+          <span class="form-control-static" data-bind="text: balanceStart"></span>
+          <div class="pull-right" >
+            <strong>On Date: </strong>
+            <input type="date" data-bind="value: dateStart" required="">
+          </div>
+        </div>
+        <div class="modal-body">
+          <!-- ko if: transactions().length -->
+          <table class="table table-striped">
+            <tr>
+              <th>Created</th>
+              <th>Account</th>
+              <th>Memo</th>
+              <th>Expenses</th>
+              <th>Income</th>
+              <th>Balance</th>
+            </tr>
+            <!-- ko foreach: transactions -->
+            <tr>
+              <td data-bind="text: moment(created).format('YY/MM/DD HH:mm:ss')"></td>
+              <td data-bind="text: account"></td>
+              <td data-bind="text: memo"></td>
+              <td class="text-right" data-bind="text: debit"></td>
+              <td class="text-right" data-bind="text: credit"></td>
+              <td class="text-right" data-bind="text: balance"></td>
+            </tr>
+            <!-- /ko  -->
+          </table>
+          <button class="btn btn-default btn-block" type="submit"
+          data-dismiss="modal">Ok</button>
+          <!-- /ko  -->
+          <!-- ko ifnot: transactions().length -->
+            <div class="alert alert-info text-center">No transactions on this date</div>
+          <!-- /ko  -->
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
